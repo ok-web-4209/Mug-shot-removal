@@ -1,5 +1,5 @@
 /**
- * Hoffman.Legal — Main JavaScript
+ * Hoffman Legal — Main JavaScript
  * Pure vanilla JS for interactivity without frameworks
  */
 
@@ -83,7 +83,7 @@
   }
 
   mobileMenuBtn.addEventListener('click', function () {
-    const isOpen = mobileMenu.classList.contains('open');
+    var isOpen = mobileMenu.classList.contains('open');
     isOpen ? closeMenu() : openMenu();
   });
 
@@ -91,10 +91,12 @@
     link.addEventListener('click', closeMenu);
   });
 
-  // ===== SCROLL-TRIGGERED ANIMATIONS =====
-  const fadeElements = document.querySelectorAll('.fade-in-up');
 
-  const fadeObserver = new IntersectionObserver(
+
+  // ===== SCROLL-TRIGGERED ANIMATIONS =====
+  var fadeElements = document.querySelectorAll('.fade-in-up');
+
+  var fadeObserver = new IntersectionObserver(
     function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
@@ -110,12 +112,29 @@
     fadeObserver.observe(el);
   });
 
+  // ===== COMPARISON SECTION ANIMATIONS =====
+  var comparisonElements = document.querySelectorAll('.comparison-left, .comparison-right');
 
+  var comparisonObserver = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          comparisonObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.2, rootMargin: '-50px' }
+  );
+
+  comparisonElements.forEach(function (el) {
+    comparisonObserver.observe(el);
+  });
 
   // ===== COUNT-UP ANIMATION =====
-  const countElements = document.querySelectorAll('.count-up');
+  var countElements = document.querySelectorAll('.count-up');
 
-  const countObserver = new IntersectionObserver(
+  var countObserver = new IntersectionObserver(
     function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
@@ -128,16 +147,16 @@
   );
 
   function animateCount(el) {
-    const target = parseInt(el.dataset.target, 10);
-    const duration = 2000;
-    const startTime = performance.now();
+    var target = parseInt(el.dataset.target, 10);
+    var duration = 2000;
+    var startTime = performance.now();
 
     function tick(now) {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+      var elapsed = now - startTime;
+      var progress = Math.min(elapsed / duration, 1);
       // Ease-out cubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const current = Math.floor(eased * target);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = Math.floor(eased * target);
       el.textContent = current.toLocaleString();
 
       if (progress < 1) {
@@ -154,22 +173,24 @@
     countObserver.observe(el);
   });
 
+
+
   // ===== FAQ ACCORDION =====
-  const faqItems = document.querySelectorAll('.faq-item');
+  var faqItems = document.querySelectorAll('.faq-item');
 
   faqItems.forEach(function (item) {
-    const trigger = item.querySelector('.faq-trigger');
-    const content = item.querySelector('.faq-content');
-    const chevron = item.querySelector('.faq-chevron');
+    var trigger = item.querySelector('.faq-trigger');
+    var content = item.querySelector('.faq-content');
+    var chevron = item.querySelector('.faq-chevron');
 
     trigger.addEventListener('click', function () {
-      const isOpen = content.classList.contains('open');
+      var isOpen = content.classList.contains('open');
 
       // Close all others
       faqItems.forEach(function (other) {
-        const otherContent = other.querySelector('.faq-content');
-        const otherChevron = other.querySelector('.faq-chevron');
-        const otherTrigger = other.querySelector('.faq-trigger');
+        var otherContent = other.querySelector('.faq-content');
+        var otherChevron = other.querySelector('.faq-chevron');
+        var otherTrigger = other.querySelector('.faq-trigger');
         otherContent.classList.remove('open');
         otherContent.classList.add('hidden');
         otherChevron.classList.remove('rotated');
@@ -190,9 +211,9 @@
 
   // Open first FAQ by default
   if (faqItems.length > 0) {
-    const firstContent = faqItems[0].querySelector('.faq-content');
-    const firstChevron = faqItems[0].querySelector('.faq-chevron');
-    const firstTrigger = faqItems[0].querySelector('.faq-trigger');
+    var firstContent = faqItems[0].querySelector('.faq-content');
+    var firstChevron = faqItems[0].querySelector('.faq-chevron');
+    var firstTrigger = faqItems[0].querySelector('.faq-trigger');
     firstContent.classList.remove('hidden');
     firstContent.classList.add('open');
     firstChevron.classList.add('rotated');
@@ -202,7 +223,7 @@
 
 
   // ===== TESTIMONIAL CAROUSEL =====
-  const testimonials = [
+  var testimonials = [
     {
       quote: 'Within two weeks, every trace of my arrest photo was gone from Google. I finally feel like I can move forward with my life.',
       author: 'Former Client, TX',
@@ -219,25 +240,25 @@
       result: '6 sites removed, flat fee',
     },
     {
-      quote: 'The peace of mind knowing a real attorney is handling this — not some random company — made all the difference. Professional and discreet.',
+      quote: 'The peace of mind knowing a real attorney is handling this \u2014 not some random company \u2014 made all the difference. Professional and discreet.',
       author: 'Former Client, NY',
       result: 'Complete removal + monitoring',
     },
   ];
 
-  let currentTestimonial = 0;
-  const quoteEl = document.getElementById('testimonial-quote');
-  const authorEl = document.getElementById('testimonial-author');
-  const resultEl = document.getElementById('testimonial-result');
-  const container = document.getElementById('testimonial-container');
-  const dotsContainer = document.getElementById('testimonial-dots');
-  const prevBtn = document.getElementById('testimonial-prev');
-  const nextBtn = document.getElementById('testimonial-next');
+  var currentTestimonial = 0;
+  var quoteEl = document.getElementById('testimonial-quote');
+  var authorEl = document.getElementById('testimonial-author');
+  var resultEl = document.getElementById('testimonial-result');
+  var container = document.getElementById('testimonial-container');
+  var dotsContainer = document.getElementById('testimonial-dots');
+  var prevBtn = document.getElementById('testimonial-prev');
+  var nextBtn = document.getElementById('testimonial-next');
 
   // Create dots
   testimonials.forEach(function (_, i) {
-    const dot = document.createElement('button');
-    dot.className = 'w-2 h-2 rounded-full transition-all ' + (i === 0 ? 'bg-gold-500 w-6' : 'bg-dark-600 hover:bg-gray-500');
+    var dot = document.createElement('button');
+    dot.className = 'w-2 h-2 rounded-full transition-all ' + (i === 0 ? 'bg-gold-500 w-6' : 'bg-gray-300 hover:bg-gray-400');
     dot.setAttribute('aria-label', 'Go to testimonial ' + (i + 1));
     dot.addEventListener('click', function () {
       goToTestimonial(i);
@@ -246,18 +267,18 @@
   });
 
   function updateTestimonial() {
-    const t = testimonials[currentTestimonial];
+    var t = testimonials[currentTestimonial];
     quoteEl.textContent = '\u201C' + t.quote + '\u201D';
     authorEl.textContent = t.author;
     resultEl.textContent = t.result;
 
     // Update dots
-    const dots = dotsContainer.children;
-    for (let i = 0; i < dots.length; i++) {
+    var dots = dotsContainer.children;
+    for (var i = 0; i < dots.length; i++) {
       if (i === currentTestimonial) {
         dots[i].className = 'w-6 h-2 rounded-full bg-gold-500 transition-all';
       } else {
-        dots[i].className = 'w-2 h-2 rounded-full bg-dark-600 hover:bg-gray-500 transition-all';
+        dots[i].className = 'w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all';
       }
     }
   }
@@ -272,12 +293,12 @@
   }
 
   prevBtn.addEventListener('click', function () {
-    const next = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+    var next = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
     goToTestimonial(next);
   });
 
   nextBtn.addEventListener('click', function () {
-    const next = (currentTestimonial + 1) % testimonials.length;
+    var next = (currentTestimonial + 1) % testimonials.length;
     goToTestimonial(next);
   });
 
@@ -285,20 +306,20 @@
   updateTestimonial();
 
   // Auto-advance every 6 seconds
-  let autoPlay = setInterval(function () {
-    const next = (currentTestimonial + 1) % testimonials.length;
+  var autoPlay = setInterval(function () {
+    var next = (currentTestimonial + 1) % testimonials.length;
     goToTestimonial(next);
   }, 6000);
 
   // Pause on hover
-  const testimonialCard = container.closest('.glass-card');
+  var testimonialCard = container.closest('.glass-card');
   if (testimonialCard) {
     testimonialCard.addEventListener('mouseenter', function () {
       clearInterval(autoPlay);
     });
     testimonialCard.addEventListener('mouseleave', function () {
       autoPlay = setInterval(function () {
-        const next = (currentTestimonial + 1) % testimonials.length;
+        var next = (currentTestimonial + 1) % testimonials.length;
         goToTestimonial(next);
       }, 6000);
     });
@@ -307,27 +328,27 @@
 
 
   // ===== MULTI-STEP CONTACT FORM =====
-  const form = document.getElementById('contact-form');
-  const formSteps = document.querySelectorAll('.form-step');
-  const stepIndicators = document.querySelectorAll('.form-step-indicator');
-  const formBack = document.getElementById('form-back');
-  const formNext = document.getElementById('form-next');
-  const formSubmit = document.getElementById('form-submit');
-  const formSuccess = document.getElementById('form-success');
-  const formNav = document.getElementById('form-nav');
-  let currentStep = 1;
+  var form = document.getElementById('contact-form');
+  var formSteps = document.querySelectorAll('.form-step');
+  var stepIndicators = document.querySelectorAll('.form-step-indicator');
+  var formBack = document.getElementById('form-back');
+  var formNext = document.getElementById('form-next');
+  var formSubmit = document.getElementById('form-submit');
+  var formSuccess = document.getElementById('form-success');
+  var formNav = document.getElementById('form-nav');
+  var currentStep = 1;
 
   function showStep(step) {
     formSteps.forEach(function (s) {
       s.classList.add('hidden');
     });
-    const target = document.querySelector('[data-step="' + step + '"]');
+    var target = document.querySelector('[data-step="' + step + '"]');
     if (target) target.classList.remove('hidden');
 
     // Update indicators
     stepIndicators.forEach(function (ind, i) {
       ind.className = 'form-step-indicator h-1 flex-1 rounded-full transition-colors ' +
-        (i < step ? 'bg-gold-500' : 'bg-dark-600');
+        (i < step ? 'bg-gold-500' : 'bg-light-200');
     });
 
     // Update buttons
@@ -355,10 +376,10 @@
   // Validation
   function validateStep(step) {
     if (step === 1) {
-      const name = document.getElementById('name');
-      const email = document.getElementById('email');
-      const phone = document.getElementById('phone');
-      let valid = true;
+      var name = document.getElementById('name');
+      var email = document.getElementById('email');
+      var phone = document.getElementById('phone');
+      var valid = true;
 
       // Name
       if (!name.value.trim()) {
@@ -369,7 +390,7 @@
       }
 
       // Email
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!email.value.trim()) {
         showError(email, 'Please enter your email');
         valid = false;
@@ -381,7 +402,7 @@
       }
 
       // Phone
-      const phoneClean = phone.value.replace(/\D/g, '');
+      var phoneClean = phone.value.replace(/\D/g, '');
       if (!phone.value.trim()) {
         showError(phone, 'Please enter your phone number');
         valid = false;
@@ -396,7 +417,7 @@
     }
 
     if (step === 2) {
-      const selected = document.querySelector('input[name="caseStatus"]:checked');
+      var selected = document.querySelector('input[name="caseStatus"]:checked');
       return !!selected;
     }
 
@@ -404,23 +425,23 @@
   }
 
   function showError(input, message) {
-    const errorEl = input.parentElement.querySelector('.form-error');
+    var errorEl = input.parentElement.querySelector('.form-error');
     if (errorEl) {
       errorEl.textContent = message;
       errorEl.classList.remove('hidden');
     }
     input.classList.add('border-red-400');
-    input.classList.remove('border-dark-600');
+    input.classList.remove('border-light-200');
   }
 
   function clearError(input) {
-    const errorEl = input.parentElement.querySelector('.form-error');
+    var errorEl = input.parentElement.querySelector('.form-error');
     if (errorEl) {
       errorEl.textContent = '';
       errorEl.classList.add('hidden');
     }
     input.classList.remove('border-red-400');
-    input.classList.add('border-dark-600');
+    input.classList.add('border-light-200');
   }
 
   formNext.addEventListener('click', function () {
@@ -437,13 +458,14 @@
     e.preventDefault();
 
     // Honeypot check
-    const honeypot = form.querySelector('input[name="website"]');
+    var honeypot = form.querySelector('input[name="website"]');
     if (honeypot && honeypot.value) return;
 
     // Show success
     formSteps.forEach(function (s) { s.classList.add('hidden'); });
     formNav.classList.add('hidden');
-    document.querySelector('.flex.gap-2.mb-8')?.classList.add('hidden');
+    var progressBar = document.querySelector('.flex.gap-2.mb-8');
+    if (progressBar) progressBar.classList.add('hidden');
     formSuccess.classList.remove('hidden');
   });
 
@@ -457,13 +479,13 @@
   // ===== SMOOTH SCROLL FOR ANCHOR LINKS =====
   document.querySelectorAll('a[href^="#"]').forEach(function (link) {
     link.addEventListener('click', function (e) {
-      const href = this.getAttribute('href');
+      var href = this.getAttribute('href');
       if (href === '#') return;
-      const target = document.querySelector(href);
+      var target = document.querySelector(href);
       if (target) {
         e.preventDefault();
-        const offset = 80; // nav height
-        const top = target.getBoundingClientRect().top + window.scrollY - offset;
+        var offset = 80; // nav height
+        var top = target.getBoundingClientRect().top + window.scrollY - offset;
         window.scrollTo({ top: top, behavior: 'smooth' });
       }
     });
