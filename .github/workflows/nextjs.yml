@@ -17,6 +17,12 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    # This tells the server to run all commands inside the 'site' folder
+    defaults:
+      run:
+        working-directory: ./site
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,6 +37,7 @@ jobs:
         with:
           node-version: "20"
           cache: "pnpm"
+          cache-dependency-path: ./site/pnpm-lock.yaml
           
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -46,7 +53,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          # Tells GitHub to upload the 'out' folder generated inside 'site'
+          path: ./site/out
 
   deploy:
     environment:
