@@ -223,28 +223,47 @@
 
 
   // ===== TESTIMONIAL CAROUSEL =====
+  // Real client reviews from the Hoffman Legal Google Business profile.
   var testimonials = [
     {
-      quote: 'Within two weeks, every trace of my arrest photo was gone from Google. I finally feel like I can move forward with my life.',
-      author: 'Former Client, TX',
-      result: '12 sites removed in 14 days',
+      quote: 'Attorney David Hoffman was fantastic in helping my son get his charges dismissed in court! Thank you David!',
+      author: 'Oliver Ravkin',
+      result: 'Google Review',
     },
     {
-      quote: 'I was denied a job because of a mugshot from a dismissed case. David got it removed from every site and search engine. Truly life-changing.',
-      author: 'Former Client, CA',
-      result: '8 sites removed, case expunged',
+      quote: 'Very professional and was always available to answer all my questions.',
+      author: 'Brayan Sanchez',
+      result: 'Google Review \u00b7 Local Guide',
     },
     {
-      quote: 'Other companies wanted $1,500 per site. David handled all 6 sites as part of one flat fee with legal authority behind it. Worth every penny.',
-      author: 'Former Client, FL',
-      result: '6 sites removed, flat fee',
+      quote: 'After being caught in the legal system for over a year, I was beyond frustrated. That all changed the moment I hired Mr. Hoffman. He stepped in, cut through the red tape immediately, and identified the specific failures in how my case was being handled. He did in days what the State couldn\u2019t, or wouldn\u2019t, do in an entire year. Because of his expertise and proactive approach, my case was dismissed almost instantaneously. If you want an advocate who actually gets results while the system stalls, I cannot recommend Mr. Hoffman highly enough.',
+      author: 'Anat Yefet',
+      result: 'Google Review',
     },
     {
-      quote: 'The peace of mind knowing a real attorney is handling this \u2014 not some random company \u2014 made all the difference. Professional and discreet.',
-      author: 'Former Client, NY',
-      result: 'Complete removal + monitoring',
+      quote: 'David Hoffman is the real deal. He listened, kept me informed every step of the way, and was upfront about costs from day one \u2014 no surprises. Responsive, professional, and genuinely cares about his clients. My case ended up in a better place than I expected. Highly recommend.',
+      author: 'Ryan Perez',
+      result: 'Google Review',
+    },
+    {
+      quote: 'I have nothing but good things to say about Hoffman Legal. David is a standout attorney and is always available to answer questions. He is organized, professional, and extremely knowledgeable. I would recommend Hoffman Legal to anyone looking for an attorney that truly cares about their clients.',
+      author: 'Jonah Suissa',
+      result: 'Google Review \u00b7 Local Guide',
+    },
+    {
+      quote: 'Dedicated, punctual and understanding of the clients needs. Hoffman Legal is without a doubt the best law firm in South Florida!',
+      author: 'Joseph Roman',
+      result: 'Google Review',
     },
   ];
+
+  // Shuffle (Fisher-Yates) so reviews appear in a different order on every visit
+  for (var s = testimonials.length - 1; s > 0; s--) {
+    var r = Math.floor(Math.random() * (s + 1));
+    var tmp = testimonials[s];
+    testimonials[s] = testimonials[r];
+    testimonials[r] = tmp;
+  }
 
   var currentTestimonial = 0;
   var quoteEl = document.getElementById('testimonial-quote');
@@ -266,11 +285,29 @@
     dotsContainer.appendChild(dot);
   });
 
+  var avatarEl = document.getElementById('testimonial-avatar');
+
   function updateTestimonial() {
     var t = testimonials[currentTestimonial];
     quoteEl.textContent = '\u201C' + t.quote + '\u201D';
     authorEl.textContent = t.author;
     resultEl.textContent = t.result;
+
+    // Reviewer initials for the avatar badge
+    if (avatarEl) {
+      var initials = t.author.split(' ').map(function (n) { return n.charAt(0); }).slice(0, 2).join('');
+      avatarEl.textContent = initials.toUpperCase();
+    }
+
+    // Scale type down for longer reviews so the card stays balanced
+    quoteEl.classList.remove('text-sm', 'text-base', 'text-lg', 'md:text-base', 'md:text-lg', 'md:text-xl');
+    if (t.quote.length > 420) {
+      quoteEl.classList.add('text-sm', 'md:text-base');
+    } else if (t.quote.length > 220) {
+      quoteEl.classList.add('text-base', 'md:text-lg');
+    } else {
+      quoteEl.classList.add('text-lg', 'md:text-xl');
+    }
 
     // Update dots
     var dots = dotsContainer.children;
