@@ -481,37 +481,42 @@
     input.classList.add('border-light-200');
   }
 
-  formNext.addEventListener('click', function () {
-    if (validateStep(currentStep)) {
-      showStep(currentStep + 1);
-    }
-  });
-
-  formBack.addEventListener('click', function () {
-    showStep(currentStep - 1);
-  });
-
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    // Honeypot check
-    var honeypot = form.querySelector('input[name="website"]');
-    if (honeypot && honeypot.value) return;
-
-    // Show success
-    formSteps.forEach(function (s) { s.classList.add('hidden'); });
-    formNav.classList.add('hidden');
-    var progressBar = document.querySelector('.flex.gap-2.mb-8');
-    if (progressBar) progressBar.classList.add('hidden');
-    formSuccess.classList.remove('hidden');
-  });
-
-  // Real-time validation clear on input
-  document.querySelectorAll('.form-input').forEach(function (input) {
-    input.addEventListener('input', function () {
-      clearError(input);
+  // The multi-step controls only exist on the multi-step variant of the
+  // contact form. The current Formspree form has none of them and must
+  // submit natively, so skip all of this wiring when they're absent.
+  if (form && formNext && formBack && formSubmit && formSuccess && formNav) {
+    formNext.addEventListener('click', function () {
+      if (validateStep(currentStep)) {
+        showStep(currentStep + 1);
+      }
     });
-  });
+
+    formBack.addEventListener('click', function () {
+      showStep(currentStep - 1);
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Honeypot check
+      var honeypot = form.querySelector('input[name="website"]');
+      if (honeypot && honeypot.value) return;
+
+      // Show success
+      formSteps.forEach(function (s) { s.classList.add('hidden'); });
+      formNav.classList.add('hidden');
+      var progressBar = document.querySelector('.flex.gap-2.mb-8');
+      if (progressBar) progressBar.classList.add('hidden');
+      formSuccess.classList.remove('hidden');
+    });
+
+    // Real-time validation clear on input
+    document.querySelectorAll('.form-input').forEach(function (input) {
+      input.addEventListener('input', function () {
+        clearError(input);
+      });
+    });
+  }
 
   // ===== SMOOTH SCROLL FOR ANCHOR LINKS =====
   document.querySelectorAll('a[href^="#"]').forEach(function (link) {
