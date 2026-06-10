@@ -274,6 +274,10 @@
   var prevBtn = document.getElementById('testimonial-prev');
   var nextBtn = document.getElementById('testimonial-next');
 
+  // The carousel only exists on the homepage; content pages load this
+  // same script without it.
+  if (container && quoteEl && dotsContainer && prevBtn && nextBtn) {
+
   // Create dots
   testimonials.forEach(function (_, i) {
     var dot = document.createElement('button');
@@ -361,6 +365,8 @@
       }, 6000);
     });
   }
+
+  } // end testimonial carousel guard
 
 
 
